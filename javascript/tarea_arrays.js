@@ -55,6 +55,8 @@ function findJavaScript(matrix) {
             const indice = matrix[fila][columna].indexOf("JavaScript");
             if (indice !== -1) {
                 return [fila, columna]
+            }else{
+                return [-1, -1]
             }
         }
     }
