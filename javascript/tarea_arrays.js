@@ -1,10 +1,11 @@
 // 1. Qué son los Arrays
 // 1.1 Crea una función llamada `procesarPedido` que recibe un array `pedido`.
 // Debes sacar el primer elemento (nombre del cliente), añadir "bebida" al inicio del array y añadir el nombre del cliente al final.
-let miPedido = ["Nonia Acosta"];
+let miPedido = ["Nonia Acosta", "bebida"];
 procesarPedido(miPedido);
 function procesarPedido(pedido) {
-    pedido.unshift("bebida");
+    nombre_cli=pedido.shift();
+    pedido.push(nombre_cli);
     return pedido;
 }
 
@@ -55,11 +56,10 @@ function findJavaScript(matrix) {
             const indice = matrix[fila][columna].indexOf("JavaScript");
             if (indice !== -1) {
                 return [fila, columna]
-            }else{
-                return [-1, -1]
             }
         }
     }
+    return [-1, -1];
 }
 
 const matrix = [
