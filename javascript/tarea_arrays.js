@@ -1,11 +1,12 @@
 // 1. Qué son los Arrays
 // 1.1 Crea una función llamada `procesarPedido` que recibe un array `pedido`.
 // Debes sacar el primer elemento (nombre del cliente), añadir "bebida" al inicio del array y añadir el nombre del cliente al final.
-let miPedido = ["Nonia Acosta", "bebida"];
+let miPedido = ["Nonia Acosta", "pizza", 'ensalada'];
 procesarPedido(miPedido);
 function procesarPedido(pedido) {
     nombre_cli=pedido.shift();
     pedido.push(nombre_cli);
+    pedido.unshift("bebida");
     return pedido;
 }
 
