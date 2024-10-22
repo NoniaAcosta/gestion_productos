@@ -1,0 +1,6 @@
+
+ 
+Producto: galleta, Precio: 5000, Cantidad: 455
+ 
+Producto: leche, Precio: 2500, Cantidad: 5
+ 
