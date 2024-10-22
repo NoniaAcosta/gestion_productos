@@ -1,2 +1,0 @@
-punto: 5 comentario: HOLA 
-punto: 5 comentario: nONIA 
