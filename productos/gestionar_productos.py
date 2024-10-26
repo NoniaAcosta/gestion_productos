@@ -1,104 +1,120 @@
-productos = {}
+import os
 
-def añadir_producto():    
-    print('Por favor, introduzca el nombre del producto:')
+productos = []
+
+
+def añadir_producto():
+    print("Por favor, introduzca el nombre del producto:")
     nombre_producto = input()
-
-    # Verifica si el producto ya existe
-    if nombre_producto in productos:
-        print("Este producto ya existe. Intente con otro nombre.")
-        return  # Salir de la función si el producto ya existe
-
-    # Crear un diccionario para las propiedades del producto
-    producto_info = {}
-
-    # Validar el precio
     while True:
-        print('Por favor, introduzca el precio:')
+        print("Por favor, introduzca el precio:")
         precio = input()
-        if precio.isdigit():  # Verificar si es un número entero
-            producto_info['precio'] = int(precio)  # Asignar el precio al diccionario
-            break  # Salir del bucle si el precio es válido
-        else:
+        if not precio.isdigit():  # Verificar si es un número entero
             print("El precio debe ser un numerico")
-    
+        else:
+            break
+
     # Validar la cantidad
     while True:
-        print('Por favor, introduzca la cantidad:')
+        print("Por favor, introduzca la cantidad:")
         cantidad = input()
-        if cantidad.isdigit():  
-            producto_info['cantidad'] = int(cantidad)  # Asignar la cantidad al diccionario
+        if cantidad.isdigit():
             break  # Salir del bucle si la cantidad es válida
         else:
             print("La cantidad debe ser numerico.")
-
-    # Agregar el producto al diccionario
-    productos[nombre_producto] = producto_info
-    print(f"Producto '{nombre_producto}' añadido exitosamente.")
+    productos.append(
+        {"producto": nombre_producto, "cantidad": cantidad, "precio": precio},
+    )
 
 
 def ver_productos():
-    for producto, detalles in productos.items():
-        print(f"Producto: {producto}")
-        for atributo, valor in detalles.items():
-            print(f"  {atributo}: {valor}")
+    for producto in productos:
+        print(
+            f"Producto: {producto['producto']}, Precio: {producto['precio']}, Cantidad: {producto['cantidad']}"
+        )
+
 
 def actualizar_producto():
     print("¿Qué producto desea editar? ")
-    print("-----Lista de Productos-----") 
+    print("-----Lista de Productos-----")
     ver_productos()  # Mostrar los productos disponibles
-    producto_a_editar = input("Ingrese el nombre: ").strip()  # Eliminar espacios alrededor
+    producto_a_editar = input(
+        "Ingrese el nombre: "
+    ).strip()  # Eliminar espacios alrededor
 
     # Verificar si el producto existe
-    if producto_a_editar in productos:
-        print(f"Producto encontrado: {producto_a_editar}")
-        
-        # Solicitar nuevos datos
-        print("Ingrese nuevo nombre:")
-        producto_editado = input().strip()
+    producto_encontrado = False
+    for producto in productos:
+        if producto_a_editar == producto["producto"]:
+            producto_encontrado = True
+            print(f"Producto encontrado: {producto_a_editar}")
 
-        print("Ingrese nuevo precio:")
-        precio_editado = input().strip()
+            # Solicitar nuevos datos
+            print("Ingrese nuevo nombre:")
+            producto_editado = input().strip()
 
-        print("Ingrese nueva cantidad:")
-        cantidad_editada = input().strip()
+            print("Ingrese nuevo precio:")
+            precio_editado = input().strip()
+            precio_editado = (
+                float(precio_editado) if "." in precio_editado else int(precio_editado)
+            )
 
-        # Si el nombre del producto cambia, usa pop para eliminarlo y asignar el nuevo
-        if producto_a_editar != producto_editado:
-            productos[producto_editado] = productos.pop(producto_a_editar)  # Cambiar nombre
-        # Actualizar el precio y la cantidad
-        productos[producto_editado]['precio'] = precio_editado
-        productos[producto_editado]['cantidad'] = cantidad_editada
-        
-        print(f"Producto actualizado: {producto_editado}")
-    else:
+            print("Ingrese nueva cantidad:")
+            cantidad_editada = int(input().strip())
+
+            # Actualizar los valores en el diccionario del producto
+            producto["producto"] = producto_editado
+            producto["precio"] = precio_editado
+            producto["cantidad"] = cantidad_editada
+
+            print(f"Producto actualizado: {producto_editado}")
+            break
+
+    if not producto_encontrado:
         print(f"El producto '{producto_a_editar}' no se encontró.")
-    print("-----Lista Actualizada-----") 
-    ver_productos()    
+
 
 def eliminar_producto():
     print("¿Qué producto desea eliminar? ")
     ver_productos()  # Mostrar los productos disponibles
     producto_a_eliminar = input("Ingrese el nombre: ").strip()
-    del(productos[producto_a_eliminar])
-    print("-----Lista Actualizada-----") 
+    for producto in productos:
+        if producto["producto"] == producto_a_eliminar:
+            productos.remove(producto)
+            print(f"Producto eliminado.")
+            return
+    print("-----Lista Actualizada-----")
     ver_productos()
 
+
 def guardar_datos():
-    file_pc = open("productos.txt", 'a')
-    for producto, detalles in productos.items():
-   # Formatear la cadena como desees
-        post = f'Producto: {producto}, Precio: {detalles["precio"]}, Cantidad: {detalles["cantidad"]}\n'
-        file_pc.write(f'{ post } \n')
-    file_pc.close()
+    with open("productos.txt", "w") as file_pc:  # Usa "with" para abrir el archivo
+        for producto in productos:
+            print(producto)
+            # Formatear la cadena
+            post = (
+                f"{producto['producto']},{producto['precio']},{producto['cantidad']}\n"
+            )
+            file_pc.write(f"{post}")
     print("-----Datos Actualizados-----")
 
+
 def cargar_datos():
-    print("---Listado de produtos---")
-    file_pc=open("productos.txt", 'r')  
-    contenido = file_pc.readlines()  
-    for linea in contenido:
-        print(linea.strip())
+    if os.path.exists("productos.txt"):
+        print("---Listado de produtos---")
+        file_pc = open("productos.txt", "r")
+        contenido = file_pc.readlines()
+        for linea in contenido:
+            if linea.strip():  # Ignora líneas vacías
+                # Extrae los valores de la línea actual
+                datos = linea.strip().split(",")
+                producto = {
+                    "producto": datos[0],
+                    "precio": (datos[1]),
+                    "cantidad": (datos[2]),
+                }
+                productos.append(producto)
+
 
 def menu():
     print("Operaciones posibles a realizar")
@@ -108,9 +124,9 @@ def menu():
         print("3: Actualizar producto")
         print("4: Eliminar producto")
         print("5: Guardar datos y salir")
-        opcion = input("Selecciona una opción: ") 
+        opcion = input("Selecciona una opción: ")
         if opcion.isdecimal():
-            opcion=int(opcion)
+            opcion = int(opcion)
             if opcion == 1:
                 añadir_producto()
             elif opcion == 2:
@@ -127,5 +143,7 @@ def menu():
         else:
             print("Por favor, ingrese numeros de 1 al 5")
 
+
 cargar_datos()
+ver_productos()
 menu()

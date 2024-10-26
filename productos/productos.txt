@@ -1,6 +1,4 @@
-
- 
-Producto: galleta, Precio: 5000, Cantidad: 455
- 
-Producto: leche, Precio: 2500, Cantidad: 5
- 
+loco,500,1
+locote,500,1
+remerita,5000,50
+hola,4,5
